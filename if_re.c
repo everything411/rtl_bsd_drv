@@ -1177,6 +1177,7 @@ static int re_alloc_buf(struct re_softc *sc)
                 size = RE_TX_MAXSIZE_64K;
                 break;
         }
+        RE_UNLOCK(sc);
         error = bus_dma_tag_create(sc->re_parent_tag, 1, 0,
                                    BUS_SPACE_MAXADDR, BUS_SPACE_MAXADDR, NULL,
                                    NULL, size, RE_NTXSEGS, size, 0,
@@ -1185,6 +1186,7 @@ static int re_alloc_buf(struct re_softc *sc)
         if (error) {
                 //device_printf(dev,"re_tx_mtag fail\n");
                 //goto fail;
+                RE_LOCK(sc);
                 return error;
         }
 
@@ -1202,9 +1204,11 @@ static int re_alloc_buf(struct re_softc *sc)
         if (error) {
                 //device_printf(dev,"re_rx_mtag fail\n");
                 //goto fail;
+                RE_LOCK(sc);
                 return error;
         }
 
+        RE_LOCK(sc);
         if (sc->re_rx_mbuf_sz <= MCLBYTES)
                 size = MCLBYTES;
         else if (sc->re_rx_mbuf_sz <=  MJUMPAGESIZE)
