@@ -3,7 +3,7 @@
 =  8168FB/8168G/818GU/8168H/8168EP/8411/8168FP                                  =
 =  8101E/8102E/8103E/8401/8105E/8106E/8402                                      =
 =  8125/8126 Driver                                                             =
-=  for FreeBSD v4.x/5.x/6.x/7.x/8.x/9.x/10.x/11.x/12.x/13.x                     =
+=  for FreeBSD v4.x/5.x/6.x/7.x/8.x/9.x/10.x/11.x/12.x/13.x/14.x                =
 =================================================================================
 
 This driver is modified by Realtek Semiconductor corp. and it has been tested OK
