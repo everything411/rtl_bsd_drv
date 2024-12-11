@@ -47,7 +47,7 @@
 #else
 #define FIBER_SUFFIX ""
 #endif
-#define RE_VERSION "1.100.00" FIBER_SUFFIX
+#define RE_VERSION "1.100.00" FIBER_SUFFIX "-ASPM-hack"
 
 __FBSDID("$FreeBSD: src/sys/dev/re/if_re.c,v " RE_VERSION __DATE__ " " __TIME__ "  wpaul Exp $");
 
@@ -71,6 +71,8 @@ __FBSDID("$FreeBSD: src/sys/dev/re/if_re.c,v " RE_VERSION __DATE__ " " __TIME__ 
 #include <net/ethernet.h>
 #include <net/if_dl.h>
 #include <net/if_media.h>
+
+#include <net/if_private.h>
 
 #include <net/bpf.h>
 
@@ -5277,10 +5279,12 @@ static int re_attach(device_t dev)
                 goto fail;
         }
 
+/*
         if (sc->re_res_type == SYS_RES_IOPORT)
                 device_printf(dev, "Using I/O Ports\n");
         else
                 device_printf(dev, "Using Memory Mapping!\n");
+*/
 
         sc->re_btag = rman_get_bustag(sc->re_res);
         sc->re_bhandle = rman_get_bushandle(sc->re_res);
@@ -5328,8 +5332,8 @@ static int re_attach(device_t dev)
                 if (sc->re_res_pba != NULL &&
                     pci_alloc_msix(dev, &msixc) == 0) {
                         if (msixc == RL_MSI_MESSAGES) {
-                                device_printf(dev, "Using %d MSI-X message\n",
-                                              msixc);
+                                //device_printf(dev, "Using %d MSI-X message\n",
+                                //              msixc);
                                 sc->re_if_flags |= RL_FLAG_MSIX;
                         } else
                                 pci_release_msi(dev);
@@ -5390,6 +5394,7 @@ static int re_attach(device_t dev)
 
 #if OS_VER >= VERSION(7,3)
         /* Disable ASPM L0S/L1 and Clock Request. */
+/*
         if (sc->re_expcap != 0) {
                 u_int32_t		cap, ctl;
                 cap = pci_read_config(dev, sc->re_expcap +
@@ -5406,6 +5411,7 @@ static int re_attach(device_t dev)
                 } else
                         device_printf(dev, "no ASPM capability\n");
         }
+*/
 #endif //OS_VER >= VERSION(7,3)
 
         re_init_timer(sc);
@@ -5580,6 +5586,7 @@ static int re_attach(device_t dev)
         /*
          * A RealTek chip was detected. Inform the world.
          */
+/*
         device_printf(dev,"version:%s\n", RE_VERSION);
         device_printf(dev,"Ethernet address: %6D\n", eaddr, ":");
         if (HW_DASH_SUPPORT_DASH(sc)) {
@@ -5590,6 +5597,7 @@ static int re_attach(device_t dev)
         printf("\nThis product is covered by one or more of the following patents: \
            \nUS6,570,884, US6,115,776, and US6,327,625.\n");
 
+*/
 #if OS_VER < VERSION(6,0)
         bcopy(eaddr, (char *)&sc->arpcom.ac_enaddr, ETHER_ADDR_LEN);
 #endif
